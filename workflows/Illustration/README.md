@@ -313,3 +313,147 @@ Each detailer includes a connected `Image Comparer` panel to preview the before/
 ---
 
 These detailers give you precision control over high-detail regions that often break down in lower-resolution workflows. Use them all for maximum refinement, or toggle off any that aren’t needed for your current style.
+
+## 👗🧴🌄 Stage 2: Clothing / Skin / Background Detailers
+
+The **Clothing**, **Skin**, and **Background Detailers** represent the final surface-level refiners in the RenderFluid illustration pipeline. These nodes use the same `MaskDetailer` architecture as earlier stages but apply it to broader regions of the image using class-specific masks (e.g. “clothes,” “skin,” or “background”). This allows for localized enhancement of color, texture, fabric folds, lighting, or environment — all without altering the character's core shape or structure.
+
+![Example Image](../../_bin/rf_instr_illustration_v1_0003.png)
+
+Each node follows the same crop–mask–refine–blend structure but uses **different prompts**, **mask targets**, and **detail tuning** to achieve the best results for its focus area.
+
+---
+
+### ✅ How They Work
+
+- A target mask (clothes, skin, or background) is generated using a segmentation model like `VITMatte`  
+- A custom prompt guides detail regeneration for the masked region  
+- A crop is created and passed to the base model with tuning settings  
+- The output is reblended into the original using soft boundaries  
+- Final result is passed downstream with enhanced detail  
+
+---
+
+### 🔧 Shared Key Settings
+
+These are common across all three nodes:
+
+- `guide_size`: usually 768 for mid-size regions  
+- `max_size`: 1024 default for full-body coverage  
+- `mask_mode`: set to `masked only` to isolate the region  
+- `crop_factor`: 2.0–2.3 for safe cropping without bleed  
+- `refiner_ratio`: 0.8–1.0 for maximum clarity  
+- `noise_mask_feather`: 10px recommended for soft blend  
+- `contour_fill`: leave disabled unless edge artifacts appear  
+- `cfg` and `denoise`: adjust for stylistic vs photoreal render control  
+- `basic_pipe`: used to inject prompt guidance per region  
+
+---
+
+### 👗 Clothing Detailer
+
+Enhances textiles, patterns, accessories, and folds in fabric. Useful for fashion images, stylized costumes, or when accessories need to pop.
+
+**Prompt Example:**
+
+`crisp fabric weave(1.2), rich colour palette, subtle specular highlights, tailored fit, stylish accessories, high-fashion editorial look`
+
+Recommended for: cosplay renders, streetwear fashion, high-res fantasy gear
+
+---
+
+### 🧴 Skin Detailer
+
+(OPTIONAL for illustration styles)
+
+Used to smooth or refine skin tones, highlight curvature, or reduce shading artifacts. In illustration work, this step is often unnecessary unless very close-up or realism-adjacent.
+
+**Prompt Example:**
+
+`smooth glowing skin, soft ambient shadows, peach undertones, stylized painterly texture, clear highlights`
+
+Use only if skin is a primary focal area or if original image has texture issues.
+
+---
+
+### 🌄 Background Detailer
+
+Refines trees, skies, streets, walls, or any scene setting in the environment. It enhances clarity without redrawing or shifting perspective.
+
+**Prompt Example:**
+
+`lush landscape, deep sky gradient, sunlit grass, high-contrast shadows, soft clouds, photoreal scenic depth`
+
+Ideal for scenic compositions or when environmental storytelling is important.
+
+---
+
+### 📊 Visual Outputs
+
+- MaskPreview: shows the selected target region (clothes, skin, or background)  
+- Preview Image:
+
+## 🧱 Stage 3: Final Upscaler (Super Resolution)
+
+The **Final Upscaler** is the last stage of the RenderFluid pipeline. It applies a powerful high-resolution pass using a tile-aware super-resolution model, enabling zoom-level detail and ultra-sharp renders for large formats. This step is **computationally intensive** and adds significant processing time, so it’s only recommended when:
+
+- You plan to **crop or zoom** into the final image  
+- You need **gallery-quality output** or large format prints  
+- You are rendering for **commercial** or **detail-critical** uses  
+
+![Example Image](../../_bin/rf_instr_illustration_v1_0014.png)
+
+For most web-based or general illustration workflows, this step can be safely skipped.
+
+---
+
+### ✅ How It Works
+
+1. The image is passed through a tile-aware upscaling model (such as `4xUltrasharp`)  
+2. A high-quality prompt is re-applied for diffusion-based refinement  
+3. LoRA and wildcard modifiers can be added one final time  
+4. The image is split into tiles, upscaled, and then merged seamlessly  
+5. The final output is merged back into the graph for preview or save  
+
+---
+
+### 🔧 Key Settings (Ultimate SD Upscale)
+
+- `upscale_model`: the upscaling checkpoint (e.g. `RenderFluidF_pny_clip8_illustration_v0.9_safefusion`)  
+- `scale`: how much to upscale — **2.0** is standard  
+- `cfg`: classifier-free guidance scale — **7.0–9.0** is a good range  
+- `steps`: sampling steps — higher = more accurate, slower (20–40 recommended)  
+- `sampler_name`: sampler used — `dpmpp_2m_sde` is high quality  
+- `tile_width` / `tile_height`: size of each tile (e.g. `512x512`)  
+- `tile_pad`: padding between tiles to avoid seams (16–32 works well)  
+- `tile_overlap`: optional overlap between tiles  
+- `tiled_decode`: leave disabled unless using specific custom decoders  
+- `seam_fix_denoise`: fixes tile seam inconsistencies (1.0 = strong fix)  
+- `seam_fix_mask_blur`: blurs mask edge between tiles (8–16 is typical)  
+- `seam_fix_padding`: blends padding area between tiles  
+
+---
+
+### 🎨 Prompt Refinement
+
+This node reuses or extends the existing prompt with additional detail emphasis. You can optionally:
+
+- Re-inject wildcard-enhanced prompts  
+- Re-apply LoRA or stylistic changes  
+- Use final touch phrasing like:  
+  - `ultra-fine detail, crisp contrast, edge-defined clarity, print-ready resolution`  
+  - `4K gallery finish, noise-free texture, surface realism, clean contour`  
+
+This is also a good place to neutralize noise or restore character sharpness after multiple prior detail passes.
+
+---
+
+### 🖼️ Output
+
+- Final image size depends on scale factor (e.g. 2x of 1024 = 2048)  
+- Preview image in the `Image Comparer` shows final output  
+- Output can now be saved, converted, or passed to a format/export pipeline  
+
+---
+
+The Final Upscaler is the **most resource-heavy** node in the entire RenderFluid pipeline. Only enable it when your image truly requires that extra level of fidelity — for most use cases, the detailer pipeline alone is sufficient.
