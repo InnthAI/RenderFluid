@@ -6,7 +6,7 @@ If you’re looking to generate character art, concept pieces, or expressive sty
 
 ---
 
-![Example Illustration](_bin/rf_example_illustration_v1_0004.png)
+![Example Illustration](../../_bin/rf_example_illustration_v1_0004.png)
 
 ---
 
