@@ -39,11 +39,25 @@ This will generate your first image using the RenderFluid PNY illustration check
    In the **Set Image Size Here** section, choose from predefined resolution options. Each size is labeled with its aspect ratio (e.g., 16:9, 4:3). Use tall sizes like `768x1344` for portraits or wider sizes like `1280x720` for thumbnails or backgrounds.
 
 3. **Checkpoints**  
-   By default, the model is set to the RenderFluid PNY checkpoint. You can switch this in the **Set Checkpoint Here** node if you're working with a different model, such as JuggernautXL for photorealistic outputs.
+   By default, the model is set to the RenderFluid PNY checkpoint. You can switch this in the **Set Checkpoint Here** node if you're working with a different model.
 
 4. **LoRAs**  
    To add a LoRA, use the dropdown under **Select LoRA to add to the text**. LoRAs adjust the style or content of your generation and are automatically added to the prompt with the correct weight format. You can include more than one and adjust strength values to fine-tune the results.
 
 ---
+## 🖌️ Step 2 – Initial Image Generation
 
-Once you're happy with your generation, continue on to the next stage to apply facial detail enhancements or skip ahead to upscaling.
+Once your prompt and resolution are set, it's time to generate your first image. The **KSampler** node is what actually runs the AI model and turns your prompt into a final image.
+
+You’ll see options like `steps`, `cfg`, `sampler_name`, and `scheduler`. These control the quality, randomness, and variation in your output. For most users, **there’s no need to adjust these**—you’ll get better results by experimenting with different **checkpoints** or **LoRAs** before touching sampler settings.
+
+![Example Image](../../_bin/rf_instr_illustration_v1_0002.png)
+
+If you want to tweak later:
+- Increase **steps** (e.g. 20+) for more detail
+- Adjust **cfg** (5–7.5 range is ideal) to control how strongly the model follows your prompt
+- Change **sampler** types if you’re chasing a specific look
+
+But for now, just run the image with default settings and review the results!
+
+
