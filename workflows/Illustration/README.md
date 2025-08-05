@@ -128,3 +128,35 @@ This pipeline is fully documented in the **Expression + Swap** guide, and suppor
 > ⚠️ **Important:** If you're running the face swap workflow on illustration-style outputs, we **recommend disabling the FaceDetailer** in that workflow. It's optimized for photo realism and may over-sharpen stylized faces.
 
 Use Stage 1.5 only when you need identity control or expressive precision—otherwise, proceed directly to Stage Two.
+
+## 🎯 Stage 2 – Character Detail Enhancement
+
+After generating your base image in Stage One, you now have the option to refine it further using **Stage Two: the Detail Pipeline**. This step adds fine-grain improvements to character visuals, enhancing facial structure, clothing edges, and overall texture clarity—especially useful before high-resolution upscaling.
+
+You have two versions to choose from:
+
+### 1. Full (Heavy) Detail Pipeline
+Includes detailers for:
+- Face
+- Eyes
+- Lips
+- Hands
+- Hair
+- Clothing
+- Skin
+- Background
+
+This version is ideal if you're working on **character-focused images** where expressions, styling, and subtle details matter. All modules are optimized for illustration use and tuned for visual consistency.
+
+### 2. Lite Detail Pipeline
+Includes only the most impactful modules:
+- Face
+- Eyes
+- Clothing
+- Background
+
+This version runs faster and uses less VRAM, making it a better choice for quick iterations or when rendering in bulk. For most illustration use cases, the Lite version delivers nearly the same visual impact.
+
+---
+
+For this guide, we’ll continue with the **Full (Heavy) Detail Pipeline**.
