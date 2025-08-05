@@ -119,3 +119,12 @@ The final step in Stage One is handled by the **RF - Saver** module. This node s
 This metadata is compatible with tools like CivitAI’s remix features and other ComfyUI pipelines that load from PNG files.
 
 
+## 😶 Stage 1.5 – Expression Control & Face Swapping (Optional)
+
+RenderFluid includes a separate optional pipeline for **expression editing and face swapping**, which can be used after Stage One if you're looking to replace character faces or refine emotional tone.
+
+This pipeline is fully documented in the **Expression + Swap** guide, and supports batch and single image use with powerful expression editing tools.
+
+> ⚠️ **Important:** If you're running the face swap workflow on illustration-style outputs, we **recommend disabling the FaceDetailer** in that workflow. It's optimized for photo realism and may over-sharpen stylized faces.
+
+Use Stage 1.5 only when you need identity control or expressive precision—otherwise, proceed directly to Stage Two.
