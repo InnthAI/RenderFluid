@@ -107,6 +107,8 @@ If you prefer to **blur** the flagged content instead of stopping the render, yo
 
 The final step in Stage One is handled by the **RF - Saver** module. This node saves your generated image to disk, embedding full metadata (seed, resolution, model, LoRA, prompt, and more) in the PNG file—making it easy to re-use or remix later.
 
+![Example Image](../../_bin/rf_instr_illustration_v1_0007.png)
+
 ### Key Features:
 
 - 📁 **Output Path:** Files are saved to `Render_Fluid_Output/rf_single_pass/` by default.
@@ -116,4 +118,4 @@ The final step in Stage One is handled by the **RF - Saver** module. This node s
 
 This metadata is compatible with tools like CivitAI’s remix features and other ComfyUI pipelines that load from PNG files.
 
-![Example Save Output](../_bin/rf_instr_illustration_v1_0007.png)
+
