@@ -160,3 +160,58 @@ This version runs faster and uses less VRAM, making it a better choice for quick
 ---
 
 For this guide, we’ll continue with the **Full (Heavy) Detail Pipeline**.
+
+
+## 🧪 Stage 2: Face Detailer
+
+The **Face Detailer** is the first node in the Stage 2 refinement pipeline. It performs a precision pass on the face using high-resolution crops, stylized prompt injection, and local mask blending. It’s optimized for illustration-style character rendering and provides sharp, expressive facial improvements.
+
+![Example Image](../../_bin/rf_instr_illustration_v1_0011.png)
+
+### ✅ How It Works
+
+- Detects the face using SAM or bounding box hints  
+- Crops the face using `sam_crop_factor`  
+- Generates a new face from a face-specific prompt  
+- Blends the face back into the original using a mask  
+- Outputs a refined image and face mask  
+
+### 🔧 Key Settings
+
+- `guide_size`: resolution for face crop (usually 1024)  
+- `guide_size_for`: method used for guiding crop (`bbox` or `mask`)  
+- `max_size`: cap for the generated face resolution  
+- `scheduler_func_opt`: crop/blend method (`cropped_enhanced_alpha` recommended)  
+- `control after generate`: enable ControlNet post-generation (optional)  
+- `sample`: number of face generations (default: 1)  
+- `clip_skip`: skip CLIP layers to alter style  
+- `sam_dilation`: expands mask edge (3–5 recommended)  
+- `sam_threshold`: mask tightness (lower = tighter)  
+- `sam_mask_hit_use_negative`: adds negative prompt influence  
+- `refine_ratio`: how much of the new face replaces the original  
+- `inpaint_model`: optional blending via inpaint (usually off)  
+- `sam_detection_hint`: center face detection logic  
+- `sam_mask_binarization`: mask sharpness threshold  
+- `inpaint_mask_feather`: edge feathering (disable if doing later detail pass)  
+
+### 🧠 Prompt Overrides
+
+This stage supports localized prompt input through the `Make Basic Pipe` node. This allows face-only prompts like:
+
+`sharp line-art, expressive face, clean anime shading, confident smile`
+
+Use this to override flat or mismatched expressions from the base image.
+
+### 🛑 NSFW Blocking
+
+> This node includes built-in NSFW detection and blocking.  
+> Users are **forbidden** from bypassing these protections.  
+> This complies with the RenderFluid and ReActor license terms.
+
+### 📊 Visual Outputs
+
+- Right panel: before/after face comparison  
+- Bottom panel: binary face mask preview  
+- Output: merged refined image with face improved  
+
+This is the most impactful stage for character-focused art. You can skip it only if using another face detailer later in the pipeline.
