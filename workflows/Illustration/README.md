@@ -215,3 +215,101 @@ Use this to override flat or mismatched expressions from the base image.
 - Output: merged refined image with face improved  
 
 This is the most impactful stage for character-focused art. You can skip it only if using another face detailer later in the pipeline.
+
+## 👁️ Stage 2: Eye Detailer
+
+The **Eye Detailer** is the second refinement node in Stage 2 of the RenderFluid pipeline. It builds directly on the logic of the Face Detailer but focuses exclusively on enhancing the eye region. This includes sharpening lashes and pupils, refining reflections, correcting eye alignment, and enhancing emotional expression through controlled prompt injection.
+
+You can customize eye color with prompts like:
+
+- `emerald green eyes`
+- `amber eyes with dark lashes`
+- `icy blue anime-style eyes`
+- `red glowing irises, supernatural aura`
+
+## 💋✋💇 Stage 2: Lips / Hands / Hair Detailers
+
+These three detailers—**Lips**, **Hands**, and **Hair**—are grouped into a single stage because they follow the same core logic: crop, mask, enhance, and blend. They each use a version of the same base detailer node, but are tuned with area-specific bounding box detectors, crop settings, and prompts. These refinements offer subtle but meaningful improvements in realism, sharpness, and stylistic consistency—especially for close-up portraits or character renders.
+
+![Example Image](../../_bin/rf_instr_illustration_v1_0005.png)
+
+These modules are **optional** for most illustration workflows. Disabling them can speed up batch rendering with little visual loss for distant subjects. However, enabling them provides maximum polish, especially in high-res or close-up images.
+
+---
+
+### ✅ How They Work (Shared Logic)
+
+- Use bounding box detection to locate the relevant region (mouth, hands, or hair)  
+- Crop the region using the `sam_crop_factor` and related thresholds  
+- Inject a tuned prompt to generate a sharper, more expressive version of the target area  
+- Merge the detail crop back into the original image using soft masks  
+- Output the merged image and show before/after in the comparison panel  
+
+---
+
+### 🔧 Shared Key Settings (All Detailers)
+
+- `guide_size`: typically 512 (for smaller areas like lips and hands)  
+- `max_size`: 1024 is the default for higher resolution crops  
+- `sam_crop_factor`: adjusts how tight or loose the crop is  
+- `sam_dilation`: expands the mask boundary (2–3 is safe)  
+- `sam_mask_hit_threshold`: used to determine whether the region is confidently detected  
+- `inpaint_model`: usually disabled unless running a separate inpaint pass  
+- `inpaint_mask_feather`: 20px feathering to blend smoothly  
+- `clip_skip`: adjust to match the visual style of other refiners  
+- `model`: inherits from main render unless overridden  
+
+---
+
+### 💄 Lips Detailer
+
+This node focuses on the mouth and lips region. It sharpens lips, enhances gloss or texture, and can improve smile rendering.
+
+**Prompt Suggestions:**
+
+- `glossy lips, defined lip shape, subtle smile, stylized shading`  
+- `smooth lipstick texture, high-contrast mouth definition, semi-gloss`  
+- `delicate lips, expressive mouth, subtle lip shine`  
+
+**Bounding Box Model:** `bbox/lips_yolov8`  
+Best used for: portrait shots, stylized smiles, or beauty-focused illustrations
+
+---
+
+### ✋ Hands Detailer
+
+Enhances the shape, lighting, and pose of hands. Helps correct hand distortion or missing fingers in some workflows. May be skipped for stylized characters with simplified hands.
+
+**Prompt Suggestions:**
+
+- `well-defined hands, accurate fingers, soft lighting, stylized gesture`  
+- `realistic fingers, smooth shading, pose-corrected hands`  
+- `elegant hand pose, palm detail, accurate thumb placement`  
+
+**Bounding Box Model:** `bbox/hand_yolov8`  
+Best used for: natural gestures, item holding, or visible full-body characters
+
+---
+
+### 💇 Hair Detailer
+
+Focuses on sharpening strands, highlights, and hair flow. Useful for long hairstyles or characters with detailed curls, waves, or braids.
+
+**Prompt Suggestions:**
+
+- `flowing hair, defined strands, glossy highlights, natural volume`  
+- `shiny curls, layered bangs, wind-blown hair detail`  
+- `sharp hair definition, anime-style hair shine, soft waves`  
+
+**Bounding Box Model:** `seg/hair_yolov8-seg-B1`  
+Best used for: portraits, wind effects, or backlit hair glow
+
+---
+
+### 📊 Visual Outputs
+
+Each detailer includes a connected `Image Comparer` panel to preview the before/after result. These refiners only update their target area, allowing you to isolate improvements in that specific zone without changing the rest of the image.
+
+---
+
+These detailers give you precision control over high-detail regions that often break down in lower-resolution workflows. Use them all for maximum refinement, or toggle off any that aren’t needed for your current style.
