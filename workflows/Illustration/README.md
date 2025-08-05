@@ -60,4 +60,25 @@ If you want to tweak later:
 
 But for now, just run the image with default settings and review the results!
 
+## ✨ Step 3 – Initial Face Detailer Pass
 
+After the image is generated, RenderFluid runs a lightweight **Face Detailer** step. This module detects any visible faces and enhances them with extra detail, helping sharpen expressions and facial structure in illustration-style models.
+
+![Example Image](../../_bin/rf_instr_illustration_v1_0008.png)
+
+Illustration checkpoints often lack strong facial fidelity—so this step is important to ensure better results during the final upscale stages. That said, this **is not the final detailing pass**. It's optimized to inject just enough structure early on, without overprocessing or altering the artistic feel.
+
+**Recommended:** Leave the settings as-is, or disable the node entirely if you're generating non-human subjects. You don’t need to make changes here unless you’re doing deep experimentation. The full detail enhancement happens later in the pipeline.
+
+## 🔍 Step 4 – Initial Upscale Pass
+
+Once the face detailing is complete, the image enters **Upscale – Stage 1**, where it is resized and cleaned up using an efficient upscaler (by default, `remacri_original.pt`). This step prepares the image for final output or further enhancement, depending on your needs.
+
+![Example Image](../../_bin/rf_instr_illustration_v1_0012.png)
+
+This stage uses **Lanczos** as the upscaling method and increases the image size by a factor of 1.5x. That’s often enough for **social media, concept art, or general use**. If you’re happy with the result, you can stop here and export the image. But if you want **maximum fidelity for print or high-resolution use**, this upscale provides a better base for later face and background detailers to work from.
+
+### Key Settings:
+- **upscale_method**: Controls the algorithm; Lanczos is fast and crisp.
+- **scale_by**: Determines how much to increase the image size (1.5x default).
+- **steps / cfg / denoise**: These affect quality and can be tuned, but the defaults are optimized for balance and speed.
