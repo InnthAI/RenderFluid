@@ -4,4 +4,4 @@
 
 With RenderFluid, you can generate high-quality AI content without writing a line of code, switching models mid-run, or worrying about unsafe outputs. Whether you're producing art, media, marketing, or internal tools, RenderFluid gives you speed, control, and auditability—all with plug-and-play simplicity.
 
-![RenderFluid Illustration Workflow](bin/rf_instr_illustration_v1_0001.png)
+![RenderFluid Illustration Workflow](_bin/rf_instr_illustration_v1_0001.png)
