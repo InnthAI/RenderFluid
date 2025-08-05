@@ -82,3 +82,38 @@ This stage uses **Lanczos** as the upscaling method and increases the image size
 - **upscale_method**: Controls the algorithm; Lanczos is fast and crisp.
 - **scale_by**: Determines how much to increase the image size (1.5x default).
 - **steps / cfg / denoise**: These affect quality and can be tuned, but the defaults are optimized for balance and speed.
+
+
+## 🛡️ Step 5 – SFW Enforcement (Topggle Filter)
+
+RenderFluid includes an integrated SFW enforcement layer powered by **NudeNet**, which automatically scans and flags NSFW content before it finishes rendering. This is designed for creators working in regulated or public-facing environments where safe outputs are critical.
+
+![Example Image](../../_bin/rf_instr_illustration_v1_0004.png)
+
+### How It Works:
+The **Intercept NSFW Outputs** node uses the loaded `nudenet.onnx` model to evaluate each image. If any flagged content exceeds the **threshold** (default is `0.60`), the graph will be stopped before the image is finalized—ensuring nothing unsafe slips through.
+
+- You can adjust the **threshold** to change sensitivity. A lower number catches more content, but may cause false positives.
+- The current setup **kills the graph** for flagged content. This is the strictest and safest mode.
+
+### Optional: Use Nudity Blur Instead of Kill
+If you prefer to **blur** the flagged content instead of stopping the render, you can enable the **Apply NudeNet** node (currently disabled) and disable the Intercept node. This applies a **pixelation filter** to any flagged body parts using your selected filter list.
+
+⚙️ You can modify what counts as NSFW in the **Filtered Labels** section. For example, if you want to allow bare feet but still block nudity, just toggle those options.
+
+📌 Full instructions and explanations are included inside the workflow canvas—hover over each section for help tips.
+
+## 💾 Step 6 – Save the Image (with Metadata)
+
+The final step in Stage One is handled by the **RF - Saver** module. This node saves your generated image to disk, embedding full metadata (seed, resolution, model, LoRA, prompt, and more) in the PNG file—making it easy to re-use or remix later.
+
+### Key Features:
+
+- 📁 **Output Path:** Files are saved to `Render_Fluid_Output/rf_single_pass/` by default.
+- 🧠 **Auto Naming:** Filenames include the model name, date, and time stamp for easy version tracking.
+- 🧬 **Metadata Embedded:** You’ll retain all workflow details inside the image file—including the positive/negative prompts, model details, and config used.
+- 🎨 **Seed and Size Recorded:** Ensures exact reproducibility if you want to regenerate the same image later.
+
+This metadata is compatible with tools like CivitAI’s remix features and other ComfyUI pipelines that load from PNG files.
+
+![Example Save Output](../_bin/rf_instr_illustration_v1_0007.png)
